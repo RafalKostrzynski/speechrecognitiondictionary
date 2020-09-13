@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class Creater {
+public class Creator {
     private LanguageRecognition languageRecognition;
 
-    public Creater(LanguageRecognition languageRecognition) throws APIError {
+    public Creator(LanguageRecognition languageRecognition) throws APIError {
         this.languageRecognition = languageRecognition;
 
         List<Result> results = languageRecognition.getRecognitionResult();
