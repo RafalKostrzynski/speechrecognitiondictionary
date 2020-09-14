@@ -19,7 +19,7 @@ public class Creator {
         List<Result> results = languageRecognition.getRecognitionResult("text for detection");
         System.out.println(results.get(0).isReliable);
 
-        List<LexiconResult> lexiconResults = lexicon.getLexiconInfo("en","alphabet");
+        List<LexiconResult> lexiconResults = lexicon.getLexiconInfo("en", "alphabet");
         for (LexiconResult element : lexiconResults) {
             System.out.println(element.getSenses().get(0).getDefinition());
         }
