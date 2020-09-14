@@ -12,10 +12,10 @@ import java.util.List;
 public class LanguageRecognition {
 
     @Value("${DETECTLANGUAGEAPIKEY}")
-    private String DetectLanguageApiKey;
+    private String detectLanguageApiKey;
 
-    public List<Result> getRecognitionResult() throws APIError {
-        DetectLanguage.apiKey = DetectLanguageApiKey;
-        return DetectLanguage.detect("language test");
+    public List<Result> getRecognitionResult(String detectText) throws APIError {
+        DetectLanguage.apiKey = detectLanguageApiKey;
+        return DetectLanguage.detect(detectText);
     }
 }
