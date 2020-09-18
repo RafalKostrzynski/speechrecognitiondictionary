@@ -31,17 +31,22 @@ public class Api {
     //TODO something such as "use in a sentence if not sure about the language"
 
     @GetMapping("/wordinfo")
-    public ResponseEntity<PhraseInfo> getWordInfo(@RequestParam String phrase) throws APIError {
+    public ResponseEntity<PhraseInfo> getWordInfo(@RequestParam String word) throws APIError {
+        Result result = getResult(word);
+        if (result == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return getDefinitions(word, result);
+    }
+
+    private Result getResult(String phrase) throws APIError {
         Result result = new Result();
         List<Result> results = languageRecognition.getRecognitionResult(phrase);
         if (results != null) {
             result = results.stream().findFirst().get();
-        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        return getPhraseInfoResponseEntity(phrase, result);
+        } else return null;
+        return result;
     }
 
-    private ResponseEntity<PhraseInfo> getPhraseInfoResponseEntity(String phrase, Result result) {
+    private ResponseEntity<PhraseInfo> getDefinitions(String phrase, Result result) {
         List<String> descriptions = new ArrayList<>();
         List<Sens> lexiconInfo = lexicon.getLexiconInfo(result.language, phrase);
         if (lexiconInfo != null) {
