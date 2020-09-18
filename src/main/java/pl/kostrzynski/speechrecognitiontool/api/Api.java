@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.kostrzynski.speechrecognitiontool.model.PhraseInfo;
 import pl.kostrzynski.speechrecognitiontool.model.Sens;
 import pl.kostrzynski.speechrecognitiontool.service.LanguageRecognition;
@@ -48,5 +45,10 @@ public class Api {
         } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(new PhraseInfo(result, phrase, descriptions), HttpStatus.ACCEPTED);
+    }
+
+    @ExceptionHandler({APIError.class})
+    public ResponseEntity<HttpStatus> errorMethod() {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
