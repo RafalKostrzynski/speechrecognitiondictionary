@@ -28,14 +28,20 @@ public class Api {
         this.lexicon = lexicon;
     }
 
-    @GetMapping("/phraseinfo")
-    public ResponseEntity<PhraseInfo> getPhraseInfo(@RequestParam String phrase) throws APIError {
+    //TODO something such as "use in a sentence if not sure about the language"
+
+    @GetMapping("/wordinfo")
+    public ResponseEntity<PhraseInfo> getWordInfo(@RequestParam String phrase) throws APIError {
         Result result = new Result();
         List<Result> results = languageRecognition.getRecognitionResult(phrase);
         if (results != null) {
             result = results.stream().findFirst().get();
         } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
+        return getPhraseInfoResponseEntity(phrase, result);
+    }
+
+    private ResponseEntity<PhraseInfo> getPhraseInfoResponseEntity(String phrase, Result result) {
         List<String> descriptions = new ArrayList<>();
         List<Sens> lexiconInfo = lexicon.getLexiconInfo(result.language, phrase);
         if (lexiconInfo != null) {
