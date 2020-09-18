@@ -47,7 +47,7 @@ public class Api {
         return new ResponseEntity<>(new PhraseInfo(result, phrase, descriptions), HttpStatus.ACCEPTED);
     }
 
-    @ExceptionHandler({APIError.class})
+    @ExceptionHandler({APIError.class, IllegalArgumentException.class})
     public ResponseEntity<HttpStatus> errorMethod() {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
