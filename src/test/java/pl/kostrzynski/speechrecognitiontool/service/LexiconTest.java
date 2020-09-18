@@ -1,7 +1,7 @@
 package pl.kostrzynski.speechrecognitiontool.service;
 
 import org.junit.jupiter.api.Test;
-import pl.kostrzynski.speechrecognitiontool.model.LexiconResult;
+import pl.kostrzynski.speechrecognitiontool.model.Sens;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +14,11 @@ class LexiconTest {
 
     @Test
     public void getLexiconInfoTest() {
-        List<LexiconResult> lexiconResults = new ArrayList<>();
+        List<Sens> sensResults = new ArrayList<>();
 
         Lexicon lexicon = mock(Lexicon.class);
-        when(lexicon.getLexiconInfo("en", "test")).thenReturn(new ArrayList<LexiconResult>());
+        when(lexicon.getLexiconInfo("en", "test")).thenReturn(new ArrayList<Sens>());
 
-        assertEquals(lexiconResults, lexicon.getLexiconInfo("en", "test"));
+        assertEquals(sensResults, lexicon.getLexiconInfo("en", "test"));
     }
 }
