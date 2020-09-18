@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 import pl.kostrzynski.speechrecognitiontool.model.PhraseInfo;
 import pl.kostrzynski.speechrecognitiontool.model.Sens;
@@ -13,7 +14,9 @@ import pl.kostrzynski.speechrecognitiontool.service.LanguageRecognition;
 import pl.kostrzynski.speechrecognitiontool.service.Lexicon;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/phrase", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -28,13 +31,32 @@ public class Api {
         this.lexicon = lexicon;
     }
 
-    //TODO something such as "use in a sentence if not sure about the language"
+    @GetMapping("/phraseinfo")
+    public ResponseEntity<PhraseInfo> getPhraseInfo(@RequestBody String phrase) throws APIError {
+        String keyword = "";
+        if (!phrase.endsWith(" ") && !phrase.startsWith(" ") && phrase.contains(" ")) {
+            keyword = findTheKeyword(phrase);
+            if (keyword == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            keyword = phrase.trim();
+        }
 
-    @GetMapping("/wordinfo")
-    public ResponseEntity<PhraseInfo> getWordInfo(@RequestParam String word) throws APIError {
-        Result result = getResult(word);
+        Result result = getResult(keyword);
         if (result == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        return getDefinitions(word, result);
+
+        return getDefinitions(keyword, result);
+    }
+
+    private String findTheKeyword(String phrase) {
+        String keyword = "";
+        try {
+            String[] words = phrase.replaceAll("\\p{Punct}", "").split("\\s+");
+            keyword = Arrays.stream(words).filter(e -> e.toUpperCase().equals(e)).findFirst().get();
+
+        } catch (Exception e) {
+            return null;
+        }
+        return keyword.trim();
     }
 
     private Result getResult(String phrase) throws APIError {
