@@ -41,7 +41,7 @@ public class Lexicon {
 
             if (response.getStatusCode().is2xxSuccessful()) {
                 Root root = response.getBody();
-                if (root != null) return getSensesFromLexiconResults(root.getResults());
+                if (root != null && !root.getResults().isEmpty()) return getSensesFromLexiconResults(root.getResults());
             }
             return null;
 
