@@ -17,11 +17,11 @@ public class LanguageRecognition {
     public List<Result> getRecognitionResult(String detectText) throws APIError {
         DetectLanguage.apiKey = detectLanguageApiKey;
         List<Result> results = DetectLanguage.detect(detectText);
-        if (isReliable(results)) return results;
+        if (checkIfReliable(results)) return results;
         return null;
     }
 
-    private boolean isReliable(List<Result> results) {
+    private boolean checkIfReliable(List<Result> results) {
         return results.stream().anyMatch(e -> e.isReliable);
     }
 }
