@@ -2,7 +2,9 @@ package pl.kostrzynski.speechrecognitiontool.model;
 
 import com.detectlanguage.Result;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PhraseInfo {
 
@@ -37,10 +39,25 @@ public class PhraseInfo {
     }
 
     public List<String> getDescriptions() {
-        return descriptions;
+        return new ArrayList<>(descriptions);
     }
 
     public void setDescriptions(List<String> descriptions) {
         this.descriptions = descriptions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PhraseInfo that = (PhraseInfo) o;
+        return languageRecognitionResult.equals(that.languageRecognitionResult) &&
+                word.equals(that.word) &&
+                descriptions.equals(that.descriptions);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(languageRecognitionResult, word, descriptions);
     }
 }
