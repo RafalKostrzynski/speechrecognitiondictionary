@@ -16,6 +16,7 @@ import pl.kostrzynski.speechrecognitiontool.service.Lexicon;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,11 +35,10 @@ public class Api {
     @GetMapping("/phraseinfo")
     public ResponseEntity<PhraseInfo> getPhraseInfo(@RequestBody String phrase) throws APIError {
         String keyword = "";
-        if (!phrase.endsWith(" ") && !phrase.startsWith(" ") && phrase.contains(" ")) {
+        phrase = phrase.trim();
+        if (phrase.contains(" ")) {
             keyword = findTheKeyword(phrase);
             if (keyword == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            keyword = phrase.trim();
         }
 
         Result result = getResult(keyword);
@@ -53,10 +53,10 @@ public class Api {
             String[] words = phrase.replaceAll("\\p{Punct}", "").split("\\s+");
             keyword = Arrays.stream(words).filter(e -> e.toUpperCase().equals(e)).findFirst().get();
 
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             return null;
         }
-        return keyword.trim();
+        return keyword.trim().toLowerCase();
     }
 
     private Result getResult(String phrase) throws APIError {
